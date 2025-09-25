@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Manuais Técnicos | TC Chicotes</title>
+  <meta name="description" content="Repositório oficial de manuais técnicos da TC Chicotes." />
+  <style>
+    :root{
+      --ink:#0f172a;         /* texto principal */
+      --muted:#64748b;       /* texto secundário */
+      --line:#e5e7eb;        /* bordas */
+      --chip:#f8fafc;        /* tags */
+      --red:#e11d48;         /* botões */
+      --red-900:#be123c;     /* hover */
+      --placeholder:#cbd5e1; /* placeholder cinza claro */
+      --bg:#ffffff;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Inter,Roboto,Arial,sans-serif}
+    a{color:inherit;text-decoration:none}
+    .hdr{border-bottom:1px solid var(--line);padding:22px 16px}
+    .wrap{max-width:1100px;margin:0 auto;padding:0 16px}
+    .hdr h1{margin:0;font-size:24px;letter-spacing:.2px}
+    .layout{display:grid;grid-template-columns:280px 1fr;gap:24px;padding:24px 16px}
+    @media(max-width:960px){.layout{grid-template-columns:1fr}}
+    /* Sidebar */
+    .side{border:1px solid var(--line);border-radius:14px;padding:16px;position:sticky;top:16px;height:fit-content;background:#fff}
+    .side h2{font-size:14px;margin:0 0 12px;color:#1f2937;text-transform:uppercase;letter-spacing:.06em}
+    .filter{border-top:1px solid var(--line);padding-top:12px;margin-top:12px}
+    .filter:first-of-type{border-top:none;margin-top:0}
+    label{display:block;font-size:12px;color:#475569;margin-bottom:6px}
+    input,select{
+      width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;
+      background:#fff;font-size:14px;color:var(--ink)
+    }
+    input::placeholder{color:var(--placeholder)}
+    .controls-row{display:flex;gap:8px}
+    /* Buttons */
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:12px 16px;border-radius:12px;border:1px solid var(--red);background:var(--red);
+      color:#fff;font-weight:600;cursor:pointer;transition:.15s ease-in-out;
+    }
+    .btn:focus{outline:2px solid var(--red-900);outline-offset:2px}
+    .btn:hover{background:var(--red-900);border-color:var(--red-900)}
+    .btn.ghost{background:#fff;color:var(--ink);border-color:var(--line)}
+    .btn.ghost:hover{border-color:#cbd5e1}
+    /* Results */
+    .results-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .count{color:var(--muted);font-size:14px}
+    .grid{display:grid;gap:16px;grid-template-columns:1fr 1fr}
+    @media(max-width:860px){.grid{grid-template-columns:1fr}}
+    .card{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}
+    .sku{font-size:12px;color:var(--muted)}
+    .name{font-weight:700;margin:0}
+    .chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+    .chip{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:6px 10px;font-size:12px}
+    .open{display:inline-flex;background:var(--red);border:1px solid var(--red);color:#fff;border-radius:999px;padding:8px 12px;font-weight:600}
+    .open:hover{background:var(--red-900);border-color:var(--red-900)}
+    .suggest{min-height:22px;margin-bottom:8px;color:#1f2937;font-size:14px}
+    footer{border-top:1px solid var(--line);padding:18px 16px;margin-top:24px;color:var(--muted);font-size:14px}
+    .credit{margin-top:4px;font-size:12px;color:#94a3b8}
+
+    /* Linha com miniatura + nome */
+    .titleRow{display:flex;align-items:center;gap:10px;margin:6px 0 8px}
+    .mini{
+      width:48px;height:48px;border:1px solid var(--line);border-radius:10px;overflow:hidden;flex:0 0 auto;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;
+    }
+    .mini img{width:100%;height:100%;object-fit:cover;display:block}
+    .mini .ph{font-size:11px;color:var(--muted);padding:4px;text-align:center}
+
+    /* Modal (imagem grande ao selecionar) */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;padding:20px;z-index:50}
+    .modal[open]{display:flex}
+    .modal-card{background:#fff;border-radius:16px;border:1px solid var(--line);max-width:900px;width:min(900px,100%);max-height:90vh;overflow:auto}
+    .modal-head{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
+    .modal-body{padding:16px}
+    .modal-title{font-weight:700}
+    .modal-close{background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer}
+    .bigimg{width:100%;max-height:520px;object-fit:contain;border:1px solid var(--line);border-radius:12px;background:#fff}
+    .modal-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  </style>
+</head>
+<body>
+  <header class="hdr">
+    <div class="wrap">
+      <h1>Manuais Técnicos</h1>
+      <p style="margin:6px 0 0;color:var(--muted)">Busque por código, nome, categoria, marca ou modelo.</p>
+    </div>
+  </header>
+
+  <main class="wrap layout">
+    <!-- Sidebar (filtros + busca com botão) -->
+    <aside class="side" aria-label="Filtros">
+      <h2>Filtros</h2>
+
+      <!-- Busca com botão -->
+      <div class="filter">
+        <label for="q">Busca</label>
+        <form id="searchForm" class="search-form" role="search" aria-label="Buscar manuais" style="display:grid;grid-template-columns:1fr auto;gap:8px">
+          <input id="q" type="search" placeholder="Ex.: Filtro de ar, 17220-RZA-000, Honda" />
+          <button type="submit" class="btn" aria-label="Buscar">Buscar</button>
+        </form>
+      </div>
+
+      <div class="filter">
+        <label for="cat">Categoria</label>
+        <select id="cat"><option value="">Todas</option></select>
+      </div>
+
+      <div class="filter">
+        <label for="brand">Marca</label>
+        <select id="brand"><option value="">Todas</option></select>
+      </div>
+
+      <div class="filter">
+        <label for="model">Modelo</label>
+        <input id="model" type="text" placeholder="Ex.: Civic, Gol, Onix" />
+      </div>
+
+      <div class="filter">
+        <label>Anos</label>
+        <div class="controls-row">
+          <input id="yFrom" type="number" placeholder="De" min="1980" max="2030" />
+          <input id="yTo"   type="number" placeholder="Até" min="1980" max="2030" />
+        </div>
+      </div>
+
+      <div class="filter">
+        <label for="sort">Ordenar</label>
+        <select id="sort">
+          <option value="relevance">Mais relevantes</option>
+          <option value="updated">Mais recentes</option>
+          <option value="sku">Código (A→Z)</option>
+          <option value="name">Nome (A→Z)</option>
+        </select>
+      </div>
+
+      <div class="filter">
+        <button id="clear" class="btn ghost" type="button">Limpar filtros</button>
+      </div>
+    </aside>
+
+    <!-- Resultados -->
+    <section>
+      <div id="suggestions" class="suggest"></div>
+      <div class="results-head">
+        <div id="count" class="count">0 resultados</div>
+        <div></div>
+      </div>
+      <div id="grid" class="grid" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="wrap">
+    © 2025 TC Chicotes • Repositório estático de manuais
+    <div class="credit">Feito por Toque Ai / Toque Dev</div>
+  </footer>
+
+  <!-- MODAL -->
+  <dialog id="productModal" class="modal" aria-label="Detalhes do produto">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div class="modal-title" id="modalTitle">Produto</div>
+        <button class="modal-close" id="modalClose" aria-label="Fechar">Fechar</button>
+      </div>
+      <div class="modal-body">
+        <img id="modalImg" class="bigimg" alt="Imagem do produto selecionado" />
+        <div id="modalMeta" style="margin-top:12px;color:var(--muted)"></div>
+        <div class="modal-actions">
+          <a id="modalManual" class="btn" href="#" target="_blank" rel="noopener">Abrir manual</a>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+<script>
+/* ========= Helpers ========= */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const norm = s => (s||'').toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu,'');
+
+/* ========= State ========= */
+let DATA = [];
+const state = { q:"", cat:"", brand:"", model:"", yFrom:"", yTo:"", sort:"relevance" };
+
+/* ========= Boot ========= */
+fetch('./data/index.json', {cache:'no-store'})
+  .then(r=>r.json()).then(json=>{ DATA = json.items || []; init(); })
+  .catch(()=>{ DATA = []; init(); });
+
+function init(){
+  // popular selects
+  const cats = Array.from(new Set(DATA.map(i=>i.category).filter(Boolean))).sort();
+  cats.forEach(c=>{ const o=document.createElement('option'); o.value=c; o.textContent=c; $('#cat').appendChild(o); });
+
+  const brands = Array.from(new Set(DATA.flatMap(i=>i.brands||[]))).sort();
+  brands.forEach(b=>{ const o=document.createElement('option'); o.value=b; o.textContent=b; $('#brand').appendChild(o); });
+
+  // eventos
+  $('#searchForm').addEventListener('submit', e => { e.preventDefault(); state.q = $('#q').value; render(); });
+  $('#q').addEventListener('input', e => { state.q = e.target.value; render(); }); // ainda busca ao digitar
+  $('#cat').addEventListener('change', e => { state.cat = e.target.value; render(); });
+  $('#brand').addEventListener('change', e => { state.brand = e.target.value; render(); });
+  $('#model').addEventListener('input', e => { state.model = e.target.value; render(); });
+  $('#yFrom').addEventListener('input', e => { state.yFrom = e.target.value; render(); });
+  $('#yTo').addEventListener('input', e => { state.yTo = e.target.value; render(); });
+  $('#sort').addEventListener('change', e => { state.sort = e.target.value; render(); });
+  $('#clear').addEventListener('click', () => {
+    state.q=""; $('#q').value="";
+    state.cat=""; $('#cat').value="";
+    state.brand=""; $('#brand').value="";
+    state.model=""; $('#model').value="";
+    state.yFrom=""; $('#yFrom').value="";
+    state.yTo=""; $('#yTo').value="";
+    state.sort="relevance"; $('#sort').value="relevance";
+    render();
+  });
+
+  // modal
+  $('#modalClose').addEventListener('click', () => $('#productModal').close());
+  $('#productModal').addEventListener('click', (e)=>{ if(e.target === e.currentTarget) e.currentTarget.close(); });
+
+  render();
+}
+
+/* ========= Filtro/Ordenação ========= */
+function matches(i){
+  const q = norm(state.q);
+  const hay = norm([i.sku,i.name,i.category,i.application,(i.brands||[]).join(' '),(i.models||[]).join(' ')].join(' '));
+  const passQ = !q || hay.includes(q);
+  const passCat = !state.cat || i.category===state.cat;
+  const passBrand = !state.brand || (i.brands||[]).includes(state.brand);
+  const passModel = !state.model || (i.models||[]).some(m => norm(m).includes(norm(state.model)));
+  const yf = parseInt(state.yFrom||0,10), yt = parseInt(state.yTo||9999,10);
+  const years = i.years||[];
+  const passYear = years.length===0 || years.some(y => y>=yf && y<=yt);
+  return passQ && passCat && passBrand && passModel && passYear;
+}
+
+function render(){
+  let list = DATA.filter(matches);
+
+  if(state.sort==='updated') list.sort((a,b)=> new Date(b.updatedAt||0) - new Date(a.updatedAt||0));
+  if(state.sort==='sku')     list.sort((a,b)=> String(a.sku).localeCompare(String(b.sku)));
+  if(state.sort==='name')    list.sort((a,b)=> String(a.name).localeCompare(String(b.name)));
+
+  // Sugestão dinâmica: "Filtro de ar" → marcas compatíveis
+  const s = $('#suggestions');
+  if(norm(state.q).includes('filtro de ar')){
+    const brands = new Set();
+    DATA.filter(d => norm(d.category).includes('filtro de ar') || norm(d.name).includes('filtro de ar'))
+        .forEach(d => (d.brands||[]).forEach(b => brands.add(b)));
+    s.innerHTML = brands.size ? `Marcas compatíveis para <strong>Filtro de ar</strong>: ${[...brands].join(', ')}` : '';
+  } else { s.innerHTML = ''; }
+
+  $('#count').textContent = `${list.length} resultado(s)`;
+  const grid = $('#grid'); grid.innerHTML = '';
+  list.forEach(i=>{
+    const el = document.createElement('article');
+    el.className='card';
+
+    // nome + miniatura ao lado
+    const mini = i.imageUrl
+      ? `<img src="${i.imageUrl}" alt="Foto ${i.name}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ph',textContent:'Sem imagem'}))">`
+      : `<span class="ph">Sem imagem</span>`;
+
+    el.innerHTML = `
+      <div class="titleRow">
+        <div class="mini" role="button" tabindex="0" aria-label="Ver imagem de ${i.name}" data-sku="${i.sku}">
+          ${mini}
+        </div>
+        <div style="flex:1">
+          <p class="sku">Código: ${i.sku}</p>
+          <h3 class="name">${i.name}</h3>
+        </div>
+        <button class="btn ghost" data-action="details" data-sku="${i.sku}">Ver detalhes</button>
+      </div>
+
+      <div class="chips" aria-label="Marcas">${(i.brands||[]).map(b=>`<span class="chip">${b}</span>`).join('')}</div>
+      <div class="chips" aria-label="Modelos">${(i.models||[]).slice(0,8).map(m=>`<span class="chip">${m}</span>`).join('')}</div>
+      <div class="chips" aria-label="Anos">${(i.years||[]).slice(0,12).map(y=>`<span class="chip">${y}</span>`).join('')}</div>
+      <p style="margin:8px 0;color:var(--muted)">${i.application||''}</p>
+      <p><a href="${i.manualUrl}" class="open">Abrir manual</a></p>
+    `;
+
+    // eventos de seleção para abrir imagem grande
+    el.querySelector('[data-action="details"]').addEventListener('click', ()=> openModal(i));
+    const miniBox = el.querySelector('.mini');
+    miniBox.addEventListener('click', ()=> openModal(i));
+    miniBox.addEventListener('keydown', (ev)=>{ if(ev.key==='Enter' || ev.key===' ') { ev.preventDefault(); openModal(i); } });
+
+    grid.appendChild(el);
+  });
+}
+
+/* ========= Modal ========= */
+function openModal(item){
+  const md = $('#productModal');
+  $('#modalTitle').textContent = `${item.name} — ${item.sku}`;
+  $('#modalImg').src = item.imageUrl || '';
+  $('#modalImg').style.display = item.imageUrl ? 'block' : 'none';
+  $('#modalManual').href = item.manualUrl || '#';
+  $('#modalMeta').innerHTML = `
+    <div>Código: <strong>${item.sku}</strong></div>
+    <div>Categoria: <strong>${item.category || '-'}</strong></div>
+    <div>Marcas: ${(item.brands||[]).join(', ') || '-'}</div>
+    <div>Modelos: ${(item.models||[]).join(', ') || '-'}</div>
+    <div>Anos: ${(item.years||[]).join(', ') || '-'}</div>
+    <div style="margin-top:6px">${item.application||''}</div>
+  `;
+  md.showModal();
+}
+</script>
+</body>
+</html>

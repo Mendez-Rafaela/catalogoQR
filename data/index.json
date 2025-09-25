@@ -1,0 +1,128 @@
+{
+  "updatedAt": "2025-09-25",
+  "items": [
+    {
+      "sku": "17220-RZA-000",
+      "name": "Filtro de Ar Honda (1.8/2.0)",
+      "category": "Filtro de ar",
+      "brands": ["Honda"],
+      "models": ["Civic 1.8", "Civic 2.0", "HR-V"],
+      "years": [2012, 2013, 2014, 2015, 2016],
+      "updatedAt": "2025-09-15",
+      "application": "Linha Honda Civic e HR-V 1.8/2.0 — substituição do elemento filtrante.",
+      "manualUrl": "./manual-tecnico/17220-RZA-000.html"
+    },
+ {
+    "sku": "17801-0T020",
+    "name": "Filtro de Ar Toyota Corolla 2.0",
+    "category": "Filtro de ar",
+    "brands": ["Toyota"],
+    "models": ["Corolla 2.0", "Corolla Cross 2.0"],
+    "years": [2018, 2019, 2020, 2021, 2022, 2023],
+    "updatedAt": "2025-09-25",
+    "application": "Substituição do elemento filtrante do sistema de admissão.",
+    "manualUrl": "./manual-tecnico/17801-0T020.html"
+  },
+  {
+    "sku": "5G0698151F",
+    "name": "Pastilha de Freio Dianteira Volkswagen Golf",
+    "category": "Freio",
+    "brands": ["Volkswagen"],
+    "models": ["Golf", "Jetta"],
+    "years": [2015, 2016, 2017, 2018, 2019, 2020, 2021],
+    "updatedAt": "2025-09-25",
+    "application": "Substituição do conjunto de pastilhas dianteiras.",
+    "manualUrl": "./manual-tecnico/5G0698151F.html",
+    "imageUrl": "./img/5G0698151F.webp"
+    
+  },
+  {
+    "sku": "93188275",
+    "name": "Filtro de Combustível Chevrolet Onix",
+    "category": "Filtro de combustível",
+    "brands": ["Chevrolet"],
+    "models": ["Onix", "Prisma"],
+    "years": [2013, 2014, 2015, 2016, 2017, 2018, 2019],
+    "updatedAt": "2025-09-25",
+    "application": "Filtragem de combustível para motores flex.",
+    "manualUrl": "./manual-tecnico/93188275.html"
+  },
+  {
+    "sku": "55239728",
+    "name": "Correia Dentada Fiat Argo 1.3",
+    "category": "Correias",
+    "brands": ["Fiat"],
+    "models": ["Argo 1.3", "Cronos 1.3"],
+    "years": [2017, 2018, 2019, 2020, 2021, 2022],
+    "updatedAt": "2025-09-25",
+    "application": "Transmissão do comando de válvulas.",
+    "manualUrl": "./manual-tecnico/55239728.html"
+  },
+  {
+    "sku": "51605-T7A-A01",
+    "name": "Amortecedor Dianteiro Honda HR-V",
+    "category": "Suspensão",
+    "brands": ["Honda"],
+    "models": ["HR-V", "Fit"],
+    "years": [2016, 2017, 2018, 2019, 2020, 2021],
+    "updatedAt": "2025-09-25",
+    "application": "Amortecimento da suspensão dianteira.",
+    "manualUrl": "./manual-tecnico/51605-T7A-A01.html"
+  },
+  {
+    "sku": "24410-6743R",
+    "name": "Bateria Original Renault Kwid 45Ah",
+    "category": "Bateria",
+    "brands": ["Renault"],
+    "models": ["Kwid"],
+    "years": [2017, 2018, 2019, 2020, 2021, 2022, 2023],
+    "updatedAt": "2025-09-25",
+    "application": "Alimentação elétrica e partida.",
+    "manualUrl": "./manual-tecnico/24410-6743R.html"
+  },
+  {
+    "sku": "BR8ES-FO",
+    "name": "Velas de Ignição NGK Ford Ka 1.0",
+    "category": "Ignição",
+    "brands": ["Ford"],
+    "models": ["Ka 1.0", "Fiesta 1.0"],
+    "years": [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019],
+    "updatedAt": "2025-09-25",
+    "application": "Kit de 4 velas para motores 1.0 flex.",
+    "manualUrl": "./manual-tecnico/BR8ES-FO.html"
+  },
+  {
+    "sku": "26060-5RA0A",
+    "name": "Farol Dianteiro Esquerdo Nissan Kicks",
+    "category": "Iluminação",
+    "brands": ["Nissan"],
+    "models": ["Kicks"],
+    "years": [2017, 2018, 2019, 2020, 2021, 2022],
+    "updatedAt": "2025-09-25",
+    "application": "Substituição do conjunto ótico dianteiro esquerdo.",
+    "manualUrl": "./manual-tecnico/26060-5RA0A.html"
+  },
+  {
+    "sku": "25310-1R000",
+    "name": "Radiador Hyundai HB20 1.6",
+    "category": "Arrefecimento",
+    "brands": ["Hyundai"],
+    "models": ["HB20 1.6", "HB20S 1.6"],
+    "years": [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019],
+    "updatedAt": "2025-09-25",
+    "application": "Troca térmica do sistema de arrefecimento.",
+    "manualUrl": "./manual-tecnico/25310-1R000.html"
+  },
+  {
+    "sku": "MN999999",
+    "name": "Filtro de Óleo Mitsubishi Lancer 2.0",
+    "category": "Filtro de óleo",
+    "brands": ["Mitsubishi"],
+    "models": ["Lancer 2.0"],
+    "years": [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017],
+    "updatedAt": "2025-09-25",
+    "application": "Filtragem do óleo lubrificante do motor.",
+    "manualUrl": "./manual-tecnico/MN999999.html"
+  }
+  ]
+}

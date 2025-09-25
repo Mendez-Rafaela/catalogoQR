@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin • Manuais TC Chicotes</title>
+<meta name="description" content="Cadastro de produtos/manuais técnicos para repositório estático.">
+<style>
+  :root{
+    --ink:#0f172a; --muted:#64748b; --line:#e5e7eb;
+    --red:#e11d48; --red-900:#be123c; --placeholder:#cbd5e1;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:#fff;color:var(--ink);font:15px/1.55 system-ui,Segoe UI,Inter,Arial,sans-serif}
+  a{color:inherit;text-decoration:none}
+  .top{border-bottom:1px solid var(--line);padding:14px 16px;display:flex;gap:14px;align-items:center;justify-content:space-between}
+  .brand{font-weight:700;letter-spacing:.2px}
+  .wrap{max-width:1200px;margin:0 auto;padding:16px}
+  .layout{display:grid;grid-template-columns:380px 1fr;gap:24px}
+  @media(max-width:980px){.layout{grid-template-columns:1fr}}
+  .panel{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .grid.full{grid-template-columns:1fr}
+  label{display:block;font-size:12px;color:#475569;margin-bottom:6px}
+  input,textarea,select{
+    width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;font-size:14px;color:var(--ink)
+  }
+  input::placeholder,textarea::placeholder{color:var(--placeholder)}
+  textarea{min-height:90px;resize:vertical}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+  .btn{
+    border:1px solid var(--red);background:var(--red);color:#fff;border-radius:12px;padding:10px 14px;
+    font-size:14px;font-weight:600;cursor:pointer;transition:.15s ease-in-out
+  }
+  .btn:hover{background:var(--red-900);border-color:var(--red-900)}
+  .btn.secondary{background:#fff;color:var(--ink);border:1px solid var(--line)}
+  .btn.secondary:hover{border-color:#cbd5e1}
+  table{width:100%;border-collapse:collapse}
+  th,td{border-bottom:1px solid var(--line);padding:10px;text-align:left;vertical-align:middle}
+  th{font-size:12px;color:#475569}
+  .empty{color:var(--muted);padding:12px;border:1px dashed var(--line);border-radius:10px;text-align:center}
+  footer{border-top:1px solid var(--line);padding:12px 16px;color:var(--muted);font-size:12px;margin-top:16px}
+  small.hint{color:var(--muted)}
+  input[type=file]{display:none}
+  .thumb{width:84px;height:84px;object-fit:cover;border:1px solid var(--line);border-radius:10px;display:none}
+  .mini{width:48px;height:48px;object-fit:cover;border:1px solid var(--line);border-radius:8px}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">TC Chicotes • Admin de Manuais</div>
+  <div>
+    <button class="btn secondary" id="exportJson">Exportar JSON</button>
+    <label class="btn secondary" for="importJsonInput">Importar JSON</label>
+    <input id="importJsonInput" type="file" accept=".json">
+    <label class="btn secondary" for="importCsvInput">Importar CSV</label>
+    <input id="importCsvInput" type="file" accept=".csv,text/csv">
+    <button class="btn secondary" id="resetAll">Apagar tudo</button>
+  </div>
+</header>
+
+<div class="wrap layout">
+  <!-- FORM -->
+  <section class="panel">
+    <h2 style="margin:0 0 12px">Novo produto/manual</h2>
+    <div class="grid">
+      <div><label>SKU</label><input id="sku" placeholder="17220-RZA-000"></div>
+      <div><label>Nome</label><input id="name" placeholder="Filtro de Ar Honda (1.8/2.0)"></div>
+      <div><label>Categoria</label><input id="category" placeholder="Filtro de ar"></div>
+      <div><label>Versão</label><input id="version" placeholder="1.0"></div>
+      <div><label>Atualizado em</label><input id="updatedAt" type="date"></div>
+      <div><label>URL do manual</label><input id="manualUrl" placeholder="/manual-tecnico/17220-RZA-000.html"></div>
+
+      <div class="grid full"><div><label>Aplicação</label><textarea id="application" placeholder="Resumo curto de aplicação"></textarea></div></div>
+
+      <div><label>Marcas</label><input id="brands" placeholder="Honda, Toyota"></div>
+      <div><label>Modelos</label><input id="models" placeholder="Civic 1.8, HR-V"></div>
+      <div><label>Anos</label><input id="years" placeholder="2012-2016 ou 2012,2013,2014"></div>
+      <div><label>PDF (URL)</label><input id="pdf" placeholder="https://.../manual.pdf"></div>
+
+      <!-- IMAGEM -->
+      <div class="grid full">
+        <div>
+          <label>Imagem (URL)</label>
+          <input id="imageUrl" placeholder="./IMG/SEU-SKU.jpg">
+          <div style="margin-top:8px;display:flex;gap:10px;align-items:center">
+            <img id="imagePreview" alt="Preview" class="thumb">
+            <small class="hint">Coloque a foto na pasta <code>/IMG/</code> e aponte aqui (ex.: <code>./IMG/17220-RZA-000.jpg</code>)</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:12px;display:flex;gap:8px;align-items:center">
+      <button class="btn" id="save">Salvar</button>
+      <button class="btn secondary" id="clearForm">Limpar</button>
+      <span id="formMsg" style="display:none;color:#16a34a;font-weight:600">Salvo!</span>
+    </div>
+  </section>
+
+  <!-- LISTA -->
+  <section class="panel">
+    <h2 style="margin:0 0 12px">Registros</h2>
+    <div class="controls">
+      <input id="search" type="search" placeholder="Buscar" style="flex:1">
+      <select id="filterCat"><option value="">Todas categorias</option></select>
+      <select id="sort">
+        <option value="recent">Mais recentes</option>
+        <option value="name">Nome (A→Z)</option>
+        <option value="sku">Código (A→Z)</option>
+      </select>
+    </div>
+    <div id="total" style="color:var(--muted);font-size:12px">0 itens</div>
+    <div style="overflow:auto;max-height:65vh">
+      <table>
+        <thead><tr>
+          <th>Código</th>
+          <th>Nome</th>
+          <th>Categoria</th>
+          <th>Marcas</th>
+          <th>Modelos</th>
+          <th>Anos</th>
+          <th>Atualizado</th>
+          <th>Manual</th>
+          <th>Imagem</th>
+          <th style="width:220px"></th>
+        </tr></thead>
+        <tbody id="tbody"><tr><td colspan="10" class="empty">Nenhum item ainda.</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+</div>
+
+<footer>
+  LocalStorage key: <code>tc_manuals_db</code> • Exporte o JSON e publique em <code>/data/index.json</code>.<br>
+  <small class="hint">Imagens: coloque os arquivos em <code>/IMG/</code> e use caminhos relativos (ex.: <code>./IMG/SEU-SKU.jpg</code>).</small>
+</footer>
+
+<script>
+/* ========= Helpers ========= */
+const KEY="tc_manuals_db";
+const $ = s => document.querySelector(s);
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch{return []}}
+function save(data){localStorage.setItem(KEY,JSON.stringify(data))}
+function uid(){return Math.random().toString(36).slice(2,10)}
+function parseList(s){return (s||"").split(",").map(x=>x.trim()).filter(Boolean)}
+function parseYears(s){
+  if(!s) return [];
+  const t=String(s).trim();
+  if(t.includes("-")){
+    const[a,b]=t.split("-").map(n=>parseInt(n,10));
+    if(!isNaN(a)&&!isNaN(b)&&a<=b){const arr=[]; for(let y=a;y<=b;y++)arr.push(y); return arr}
+  }
+  return t.split(",").map(x=>parseInt(x,10)).filter(x=>!isNaN(x))
+}
+function fmt(d){return d?new Date(d).toISOString().slice(0,10):""}
+
+/* ========= Estado ========= */
+let DB=load();
+let editing=null;
+
+/* ========= Form ========= */
+function clearForm(){
+  editing=null;
+  ["sku","name","category","version","updatedAt","manualUrl","application","brands","models","years","pdf","imageUrl"]
+    .forEach(id=>$("#"+id).value="");
+  $("#imagePreview").removeAttribute("src");
+  $("#imagePreview").style.display="none";
+  $("#formMsg").style.display="none";
+}
+$("#clearForm").onclick=clearForm;
+
+document.getElementById("imageUrl").addEventListener("input", e=>{
+  const pv = $("#imagePreview");
+  const url = e.target.value.trim();
+  if(url){
+    pv.onerror = ()=>{ pv.style.display="none"; };
+    pv.onload  = ()=>{ pv.style.display="block"; };
+    pv.src = url;
+  } else {
+    pv.removeAttribute("src");
+    pv.style.display="none";
+  }
+});
+
+/* ========= Salvar ========= */
+$("#save").onclick=()=>{
+  const it={
+    id:editing||uid(),
+    sku:$("#sku").value.trim(),
+    name:$("#name").value.trim(),
+    category:$("#category").value.trim(),
+    version:$("#version").value.trim(),
+    updatedAt:$("#updatedAt").value||new Date().toISOString().slice(0,10),
+    manualUrl:$("#manualUrl").value.trim(),
+    application:$("#application").value.trim(),
+    brands:parseList($("#brands").value),
+    models:parseList($("#models").value),
+    years:parseYears($("#years").value),
+    pdf:$("#pdf").value.trim(),
+    imageUrl:$("#imageUrl").value.trim()
+  };
+  if(!it.sku||!it.name){alert("Preencha SKU e Nome"); return}
+  const ix=DB.findIndex(x=>x.id===it.id||x.sku===it.sku);
+  if(ix>=0) DB[ix]={...DB[ix],...it}; else DB.push(it);
+  save(DB); render();
+  $("#formMsg").style.display="inline";
+  setTimeout(()=>$("#formMsg").style.display="none",1500);
+  if(!it.manualUrl) $("#manualUrl").value = `/manual-tecnico/${it.sku}.html`;
+};
+
+/* ========= Editar/Excluir ========= */
+function edit(id){
+  const x=DB.find(i=>i.id===id); if(!x) return; editing=x.id;
+  $("#sku").value=x.sku||""; $("#name").value=x.name||""; $("#category").value=x.category||"";
+  $("#version").value=x.version||""; $("#updatedAt").value=fmt(x.updatedAt);
+  $("#manualUrl").value=x.manualUrl||`/manual-tecnico/${x.sku}.html`;
+  $("#application").value=x.application||"";
+  $("#brands").value=(x.brands||[]).join(", ");
+  $("#models").value=(x.models||[]).join(", ");
+  $("#years").value=(x.years||[]).join(", ");
+  $("#pdf").value=x.pdf||"";
+  $("#imageUrl").value=x.imageUrl||"";
+  const pv=$("#imagePreview");
+  if(x.imageUrl){ pv.src=x.imageUrl; pv.style.display="block"; } else { pv.removeAttribute("src"); pv.style.display="none"; }
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function del(id){ if(!confirm("Excluir este item?")) return; DB=DB.filter(i=>i.id!==id); save(DB); render() }
+
+/* ========= Lista / Filtros ========= */
+$("#search").addEventListener("input", render);
+$("#filterCat").addEventListener("change", render);
+$("#sort").addEventListener("change", render);
+
+function render(){
+  const q=($("#search").value||"").toLowerCase();
+  const cat=$("#filterCat").value;
+  let list=DB.slice().filter(i=>{
+    const hay=[i.sku,i.name,i.category,i.application,(i.brands||[]).join(" "),(i.models||[]).join(" ")].join(" ").toLowerCase();
+    const passQ=!q||hay.includes(q);
+    const passC=!cat||i.category===cat;
+    return passQ&&passC;
+  });
+  const sort=$("#sort").value;
+  if(sort==="recent") list.sort((a,b)=>new Date(b.updatedAt||0)-new Date(a.updatedAt||0));
+  if(sort==="name") list.sort((a,b)=>String(a.name).localeCompare(String(b.name)));
+  if(sort==="sku")  list.sort((a,b)=>String(a.sku).localeCompare(String(b.sku)));
+
+  // categorias
+  const cats=Array.from(new Set(DB.map(i=>i.category).filter(Boolean))).sort();
+  const sel=$("#filterCat"); const cur=[...sel.options].map(o=>o.value);
+  if(cur.length<=1 || cats.some(c=>!cur.includes(c))){
+    sel.innerHTML='<option value="">Todas categorias</option>'+cats.map(c=>`<option>${c}</option>`).join("");
+  }
+
+  $("#total").textContent = list.length+" item(ns)";
+  const tbody=$("#tbody"); tbody.innerHTML="";
+  if(list.length===0){
+    tbody.innerHTML='<tr><td colspan="10" class="empty">Sem itens.</td></tr>';
+    return;
+  }
+
+  list.forEach(i=>{
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+      <td>${i.sku||"-"}</td>
+      <td>${i.name||"-"}</td>
+      <td>${i.category||"-"}</td>
+      <td>${(i.brands||[]).slice(0,5).join(", ")}</td>
+      <td>${(i.models||[]).slice(0,5).join(", ")}</td>
+      <td>${(i.years||[]).slice(0,10).join(", ")}</td>
+      <td>${fmt(i.updatedAt)}</td>
+      <td>${i.manualUrl?`<a href="${i.manualUrl}" target="_blank" rel="noopener">Abrir</a>`:"-"}</td>
+      <td>${i.imageUrl?`<img src="${i.imageUrl}" alt="" class="mini" onerror="this.remove()">`:"-"}</td>
+      <td>
+        <button class="btn secondary" onclick="edit('${i.id}')">Editar</button>
+        <button class="btn secondary" onclick="navigator.clipboard.writeText('${i.manualUrl||('/manual-tecnico/'+(i.sku||'')+'.html')}')">Copiar URL</button>
+        <button class="btn secondary" onclick="del('${i.id}')">Excluir</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+/* ========= Import/Export ========= */
+document.getElementById("exportJson").onclick=()=>{
+  const payload={updatedAt:new Date().toISOString().slice(0,10), items: DB.map(({id,...rest})=>rest)};
+  const blob = new Blob([JSON.stringify(payload,null,2)], {type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="index.json"; a.click(); URL.revokeObjectURL(a.href);
+};
+
+document.getElementById("importJsonInput").addEventListener("change", async e=>{
+  const f=e.target.files[0]; if(!f) return; const text=await f.text();
+  try{
+    const json=JSON.parse(text);
+    const items=Array.isArray(json)?json:(json.items||[]);
+    DB=items.map(x=>({id:uid(),...x}));
+    save(DB); render(); e.target.value="";
+  }catch(err){alert("JSON inválido: "+err.message)}
+});
+
+document.getElementById("importCsvInput").addEventListener("change", async e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const t=await f.text();
+  const lines=t.split(/\r?\n/).filter(l=>l.trim());
+  const header=lines.shift().split(",").map(h=>h.trim());
+  const need=["sku","name","category"];
+  for(const c of need){ if(!header.includes(c)){ alert("CSV precisa de: sku,name,category"); return } }
+  const idx=Object.fromEntries(header.map((h,i)=>[h,i]));
+  const g=(row,field)=> row[idx[field]]?.trim() ?? "";
+  const items=lines.map(l=>{
+    const c=l.split(",");
+    return {
+      id:uid(),
+      sku:g(c,"sku"), name:g(c,"name"), category:g(c,"category"),
+      version:g(c,"version"), updatedAt:g(c,"updatedAt"), manualUrl:g(c,"manualUrl"),
+      application:g(c,"application"),
+      brands:(g(c,"brands")||"").split(";").map(s=>s.trim()).filter(Boolean),
+      models:(g(c,"models")||"").split(";").map(s=>s.trim()).filter(Boolean),
+      years:(g(c,"years")||"").split(";").map(n=>parseInt(n,10)).filter(n=>!isNaN(n)),
+      pdf:g(c,"pdf"),
+      imageUrl:g(c,"imageUrl")
+    }
+  }).filter(x=>x.sku&&x.name);
+
+  items.forEach(n=>{
+    const p=DB.findIndex(x=>x.sku===n.sku);
+    if(p>=0) DB[p]={...DB[p],...n}; else DB.push(n);
+  });
+  save(DB); render(); e.target.value="";
+});
+
+/* ========= Inicializa ========= */
+render();
+</script>
+</body>
+</html>
